@@ -2,34 +2,26 @@ package sn.example.demo.model;
 
 import java.util.Date;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Entity
 public class PpurigiDtlc {
 
-    private @Id Long id;
-    private @Id Integer seq;
-    private Integer amount;
+	@EmbeddedId
+	private PpurigiDtlcId id;
+	private Integer amount;
     private String receiveUserId;
     private Date regDts;
     private Date modDts;
 
-    public Long getId() {
-        return id;
-    }
+    public PpurigiDtlcId getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getSeq() {
-        return seq;
-    }
-
-    public void setSeq(Integer seq) {
-        this.seq = seq;
-    }
+	public void setId(PpurigiDtlcId id) {
+		this.id = id;
+	}    
 
     public Integer getAmount() {
         return amount;
