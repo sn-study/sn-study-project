@@ -8,6 +8,9 @@ class SnStudyProjectApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//given
+		//when
+		//then
 	}
 
 }
