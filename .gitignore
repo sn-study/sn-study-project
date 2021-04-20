@@ -1,5 +1,4 @@
 .git/*
-src/test/*
 target/*
 .idea
 /sn-study-project.iml

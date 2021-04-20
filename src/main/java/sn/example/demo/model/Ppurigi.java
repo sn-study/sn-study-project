@@ -3,10 +3,12 @@ package sn.example.demo.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@EntityListeners(PpurigiListener.class)
 public class Ppurigi {
     private @Id @GeneratedValue Long id;
     private String sendUserId;
