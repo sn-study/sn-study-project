@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class ResultDto {
     private String resultCode;
     private String resultMessage;
-    private HashMap<String, String> result;
+    private HashMap<String, String> result = new HashMap<>();
 
     public HashMap<String, String> getResult() {
         return result;
