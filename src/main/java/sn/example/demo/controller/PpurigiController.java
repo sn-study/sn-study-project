@@ -1,5 +1,7 @@
 package sn.example.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +13,8 @@ import sn.example.demo.service.PpurigiService;
 
 @RestController
 public class PpurigiController {
+
+    private static final Logger Log = LoggerFactory.getLogger(PpurigiController.class);
 
 	@Autowired
 	PpurigiService ppurigiService;

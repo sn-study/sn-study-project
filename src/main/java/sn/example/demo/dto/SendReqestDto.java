@@ -1,5 +1,8 @@
 package sn.example.demo.dto;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class SendReqestDto {
     private String sendUserId;
     private Integer amount;
@@ -27,5 +30,10 @@ public class SendReqestDto {
 
     public void setReqCnt(Integer reqCnt) {
         this.reqCnt = reqCnt;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

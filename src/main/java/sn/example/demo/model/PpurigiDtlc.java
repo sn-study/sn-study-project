@@ -1,12 +1,15 @@
 package sn.example.demo.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import java.util.Date;
 
 @Entity
+@EntityListeners(PpurigiDtlcListener.class)
 public class PpurigiDtlc {
 
 	@EmbeddedId
@@ -54,5 +57,10 @@ public class PpurigiDtlc {
 
     public void setModDts(Date modDts) {
         this.modDts = modDts;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
