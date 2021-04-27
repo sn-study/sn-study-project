@@ -1,17 +1,23 @@
 package sn.example.demo.dto;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class ResultDto {
     private String resultCode;
     private String resultMessage;
-    private HashMap<String, String> result = new HashMap<>();
+    private Map<String, String> result;
 
-    public HashMap<String, String> getResult() {
+    private ResultDto(Builder builder) {
+    	this.resultCode = builder.resultCode;
+    	this.resultMessage = builder.resultMessage;
+    	this.result = builder.result;
+    }
+    
+    public Map<String, String> getResult() {
         return result;
     }
 
-    public void setResult(HashMap<String, String> result) {
+    public void setResult(Map<String, String> result) {
         this.result = result;
     }
 
@@ -32,5 +38,24 @@ public class ResultDto {
     }
 
 
-
+    public static class Builder {
+    	private String resultCode;
+        private String resultMessage;
+        private Map<String, String> result;
+        
+        public Builder(String resultCode, String resultMessage) {
+        	this.resultCode = resultCode;
+        	this.resultMessage = resultMessage;
+        }
+        
+        public Builder result(Map<String, String> result) {
+        	this.result = result;
+        	return this;
+        }
+        
+        public ResultDto build() {
+        	return new ResultDto(this);
+        }
+    }
+    
 }

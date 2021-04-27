@@ -1,17 +1,20 @@
 package sn.example.demo.service;
 
+import java.util.Random;
+
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import sn.example.demo.controller.PpurigiController;
+import sn.example.demo.dto.SendReqestDto;
 import sn.example.demo.model.Ppurigi;
 import sn.example.demo.model.PpurigiDtlc;
 import sn.example.demo.model.PpurigiDtlcId;
 import sn.example.demo.repository.PpurigiDtlcRepository;
 import sn.example.demo.repository.PpurigiRepository;
-
-import java.util.Random;
+import sn.example.demo.utils.TokenGenerator;
 
 @Service
 public class PpurigiService {
@@ -26,24 +29,26 @@ public class PpurigiService {
 		this.ppurigiDtlcRepository = ppurigiDtlcRepository;
 	}
 	
-	public String createPpurigi(String sendUserId, int amount, int reqCnt) {
+	@Transactional
+	public String createPpurigi(SendReqestDto requestDto) {
 		// 토큰 생성
-		String token = "1";
+		String token = TokenGenerator.getToken();
 		
 		// 뿌리기 저장
 		Ppurigi ppurigi = new Ppurigi();
-		ppurigi.setSendUserId(sendUserId);
-		ppurigi.setAmount(amount);
-		ppurigi.setReqCnt(reqCnt);
+		ppurigi.setSendUserId(requestDto.getSendUserId());
+		ppurigi.setRoomId(requestDto.getRoomId());
+		ppurigi.setAmount(requestDto.getAmount());
+		ppurigi.setReqCnt(requestDto.getReqCnt());
 		ppurigi.setToken(token);
 		Long id = ppurigiRepository.save(ppurigi).getId();
 
 		// 요청 인원수만큼 뿌리기상세 저장
 		int total = 0;
 		Random random = new Random();
-		for (int seq = 1; seq <= reqCnt; seq++) {
-			int max = amount - total - reqCnt + seq;
-			int value = seq == reqCnt? max : random.nextInt(max);
+		for (int seq = 1; seq <= requestDto.getReqCnt(); seq++) {
+			int max = requestDto.getAmount() - total - requestDto.getReqCnt() + seq;
+			int value = seq == requestDto.getReqCnt()? max : random.nextInt(max);
 
 			PpurigiDtlc ppurigiDtlc = new PpurigiDtlc();
 			ppurigiDtlc.setId(new PpurigiDtlcId(id, seq));

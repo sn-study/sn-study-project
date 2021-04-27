@@ -4,19 +4,28 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class SendReqestDto {
-    private String sendUserId;
+    private Long sendUserId;
+    private String roomId;
     private Integer amount;
     private Integer reqCnt;
 
-    public String getSendUserId() {
+    public Long getSendUserId() {
         return sendUserId;
     }
 
-    public void setSendUserId(String sendUserId) {
+    public void setSendUserId(Long sendUserId) {
         this.sendUserId = sendUserId;
     }
 
-    public Integer getAmount() {
+    public String getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(String roomId) {
+		this.roomId = roomId;
+	}
+
+	public Integer getAmount() {
         return amount;
     }
 
