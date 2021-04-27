@@ -5,5 +5,4 @@ import sn.example.demo.model.PpurigiDtlc;
 import sn.example.demo.model.PpurigiDtlcId;
 
 public interface PpurigiDtlcRepository extends JpaRepository <PpurigiDtlc, PpurigiDtlcId> {
-
 }

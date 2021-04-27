@@ -1,14 +1,17 @@
 package sn.example.demo.service;
 
+import java.util.Optional;
 import java.util.Random;
 
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import sn.example.demo.dto.SendReqestDto;
+import sn.example.demo.error.TokenAlreadyExistsException;
 import sn.example.demo.model.Ppurigi;
 import sn.example.demo.model.PpurigiDtlc;
 import sn.example.demo.model.PpurigiDtlcId;
@@ -30,9 +33,12 @@ public class PpurigiService {
 	}
 	
 	@Transactional
-	public String createPpurigi(SendReqestDto requestDto) {
+	public <Optional>String createPpurigi(SendReqestDto requestDto) {
 		// 토큰 생성
 		String token = TokenGenerator.getToken();
+		if (ppurigiRepository.findByTokenLessThanExpDts(token).isPresent()){
+			throw new TokenAlreadyExistsException(token);
+		}
 		
 		// 뿌리기 저장
 		Ppurigi ppurigi = new Ppurigi();

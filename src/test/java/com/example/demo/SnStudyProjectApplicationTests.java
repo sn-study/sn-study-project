@@ -20,6 +20,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import sn.example.demo.SnStudyProjectApplication;
 import sn.example.demo.controller.PpurigiController;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.core.Is.is;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,16 +48,24 @@ public class SnStudyProjectApplicationTests {
 		//given
 		String url = "/ppurigi";
 		Map<String, Object> params = new HashMap<>();
-		params.put("sendUserId", "hannah");
 		params.put("amount", 1000);
 		params.put("reqCnt", 2);
 		String content = objectMapper.writeValueAsString(params);
 
 		//when
 		mockMvc.perform(MockMvcRequestBuilders.post(url)
+				.header("X-USER-ID", 12345)
+				.header("X-ROOM-ID", "room1")
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(jsonPath("$.resultCode", is("SUCCESS")));
+
+		mockMvc.perform(MockMvcRequestBuilders.post(url)
+				.header("X-USER-ID", 12345)
+				.header("X-ROOM-ID", "room1")
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.resultCode", is("FAIL")));
 
 		//then
 	}
