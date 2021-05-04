@@ -3,29 +3,38 @@ package sn.example.demo.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @EntityListeners(PpurigiDtlcListener.class)
+@IdClass(PpurigiDtlcId.class)
 public class PpurigiDtlc {
 
-	@EmbeddedId
-	private PpurigiDtlcId id;
+	@Id
+	private Long id;
+	@Id
+    private Integer seq;
 	private Integer amount;
     private String receiveUserId;
     private Date regDts;
     private Date modDts;
 
-    public PpurigiDtlcId getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(PpurigiDtlcId id) {
-		this.id = id;
-	}    
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Integer seq) {
+        this.seq = seq;
+    }
 
     public Integer getAmount() {
         return amount;
