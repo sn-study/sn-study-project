@@ -1,4 +1,10 @@
+.classpath
+.project
+.springBeans
+.settings/
+.idea/
+.project
 .git/*
-target/*
+target/
 .idea
-/sn-study-project.iml
+sn-study-project.iml
