@@ -7,6 +7,8 @@ public class ResultDto {
     private String resultMessage;
     private Map<String, String> result;
 
+    ResultDto() {}
+
     private ResultDto(Builder builder) {
     	this.resultCode = builder.resultCode;
     	this.resultMessage = builder.resultMessage;
