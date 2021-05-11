@@ -25,12 +25,6 @@ public class SnStudyProjectApplicationTests {
 
 	@Autowired
 	ObjectMapper objectMapper;
-
-	@Test
-	void test() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.get("/test"))
-				.andExpect(status().isOk());
-	}
 	
 	@Test
 	void send() throws Exception {
@@ -48,13 +42,6 @@ public class SnStudyProjectApplicationTests {
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.resultCode", is("SUCCESS")));
-
-		mockMvc.perform(MockMvcRequestBuilders.post(url)
-				.header("X-USER-ID", 12345)
-				.header("X-ROOM-ID", "room1")
-				.content(content)
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.resultCode", is("FAIL")));
 
 		//then
 	}

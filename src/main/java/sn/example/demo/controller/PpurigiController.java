@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import sn.example.demo.dto.ListRequestDto;
-import sn.example.demo.dto.ReceiveRequestDto;
-import sn.example.demo.dto.ResultDto;
-import sn.example.demo.dto.SendRequestDto;
+import sn.example.demo.dto.*;
 import sn.example.demo.error.PpurigiReciveException;
 import sn.example.demo.error.TokenAlreadyExistsException;
 import sn.example.demo.service.PpurigiService;
@@ -66,11 +63,11 @@ public class PpurigiController {
     }
 
     @GetMapping("/ppurigi")
-    ResultDto list(@RequestHeader(value = "X-USER-ID") Long sendUserId, @RequestParam String token) {
+    ReceiveResultDto list(@RequestHeader(value = "X-USER-ID") Long sendUserId, @RequestParam String token) {
 
 
         //requestDto.setSendUserId(sendUserId);
-        ResultDto resultDto = new ResultDto.Builder("SUCCESS", "뿌리기 조회 성공").build();
+        ReceiveResultDto resultDto = new ReceiveResultDto.Builder("SUCCESS", "뿌리기 조회 성공").build();
 
         try {
             ListRequestDto requestDto = new ListRequestDto();
@@ -79,7 +76,7 @@ public class PpurigiController {
             resultDto = ppurigiService.listPpurigi(requestDto);
         } catch (Exception e){
         //} catch (TokenInvalidException e){
-            return new ResultDto.Builder("FAIL", "유효하지 않은 요청").build();
+            return new ReceiveResultDto.Builder("FAIL", "유효하지 않은 요청").build();
         }
 
         return resultDto;

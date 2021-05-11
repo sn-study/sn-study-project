@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sn.example.demo.dto.ListRequestDto;
-import sn.example.demo.dto.ReceiveRequestDto;
-import sn.example.demo.dto.ResultDto;
-import sn.example.demo.dto.SendRequestDto;
+import sn.example.demo.dto.*;
 import sn.example.demo.error.PpurigiReciveException;
 import sn.example.demo.error.TokenAlreadyExistsException;
 import sn.example.demo.error.TokenInvalidException;
@@ -107,7 +104,7 @@ public class PpurigiService {
 		return ppurigiRepository.findByTokenAndExpDtsGreaterThan(token, new Date());
 	}
 
-	public ResultDto listPpurigi(ListRequestDto requestDto){
+	public ReceiveResultDto listPpurigi(ListRequestDto requestDto){
 		// 뿌리기 시 발급된 token + 뿌린사람 요청값으로 받습니다.
 		// 뿌린시각,뿌린금액,받기완료된금액,받기완료된정보([받은금액,받은 사용자 아이디] 리스트)
 		// 다른사람의 뿌리기건이나 유효하지 않은 token에 대해서는 조회 실패 응답이 내려가야 합니다.
@@ -116,22 +113,22 @@ public class PpurigiService {
 		if(ppurigi == null){
 			throw new TokenInvalidException();
 		}
-		HashMap<String, String> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<>();
 		map.put("뿌린 시각", ppurigi.getRegDts().toString());
 		map.put("뿌린 금액", ppurigi.getAmount().toString());
 
 		List<PpurigiDtlc> ppurigiDtlcList = ppurigiDtlcRepository.findByIdAndReceiveUserIdIsNotNull(ppurigi.getId());
 		Integer sendAmount = 0;
-		ArrayList<String> sendList = new ArrayList<String>();
+		ArrayList<String[]> sendList = new ArrayList<String[]>();
 		for (PpurigiDtlc ppurigiDtlc : ppurigiDtlcList) {
 			sendAmount += ppurigiDtlc.getAmount();
 			String[] temp = {ppurigiDtlc.getAmount().toString(), ppurigiDtlc.getReceiveUserId().toString()};
-			sendList.add(Arrays.toString(temp));
+			sendList.add(temp);
 		}
 		map.put("받기 완료된 금액", sendAmount.toString());
-		map.put("받기 완료된 정보", sendList.toString());
+		map.put("받기 완료된 정보", sendList);
 
-		ResultDto resultDto = new ResultDto.Builder("SUCCESS", "뿌리기 조회 성공").build();
+		ReceiveResultDto resultDto = new ReceiveResultDto.Builder("SUCCESS", "뿌리기 조회 성공").build();
 		resultDto.setResult(map);
 
 		return resultDto;
