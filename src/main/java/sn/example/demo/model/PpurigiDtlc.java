@@ -18,9 +18,12 @@ public class PpurigiDtlc {
 	private Long id;
 	@Id
     private Integer seq;
+    @Column(nullable = false)
 	private Integer amount;
     private Long receiveUserId;
+    @Column(nullable = false)
     private Date regDts;
+    @Column(nullable = false)
     private Date modDts;
 
     @Version

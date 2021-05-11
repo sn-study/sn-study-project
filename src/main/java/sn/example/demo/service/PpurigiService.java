@@ -33,7 +33,7 @@ public class PpurigiService {
 	public String createPpurigi(SendRequestDto requestDto) throws TokenAlreadyExistsException {
 		// 토큰 생성
 		String token = TokenGenerator.getToken();
-		if (this.findByTokenAndExpDtsLessThanNow(token).isPresent()) {
+		if (this.findByTokenAndExpDtsGreaterThanNow(token).isPresent()) {
 			throw new TokenAlreadyExistsException(token);
 		}
 		
@@ -69,7 +69,7 @@ public class PpurigiService {
 	@Transactional(rollbackFor = Exception.class)
 	public Integer updatePpurigi(ReceiveRequestDto requestDto) throws PpurigiReciveException {
 		// 토큰으로 조회
-		Optional<Ppurigi> ppurigiOptional = this.findByTokenAndExpDtsLessThanNow(requestDto.getToken());
+		Optional<Ppurigi> ppurigiOptional = this.findByTokenAndExpDtsGreaterThanNow(requestDto.getToken());
 		if (!ppurigiOptional.isPresent()) {
 			throw new PpurigiReciveException("요청 토큰에 해당하는 뿌리기가 없거나 만료되었습니다.");
 		}
@@ -91,7 +91,6 @@ public class PpurigiService {
 		if (!ppurigiDtlcOptional.isPresent()) {
 			throw new PpurigiReciveException("요청 토큰에 해당하는 뿌리기는 마감되었습니다.");
 		}
-
 		// 뿌리기 받기
 		PpurigiDtlc ppurigiDtlc = ppurigiDtlcOptional.get();
 		ppurigiDtlc.setReceiveUserId(requestDto.getReceiveUserId());
@@ -100,7 +99,7 @@ public class PpurigiService {
 		return ppurigiDtlc.getAmount();
 	}
 
-	Optional<Ppurigi> findByTokenAndExpDtsLessThanNow(String token) {
+	private Optional<Ppurigi> findByTokenAndExpDtsGreaterThanNow(String token) {
 		return ppurigiRepository.findByTokenAndExpDtsGreaterThan(token, new Date());
 	}
 

@@ -17,4 +17,5 @@ public interface PpurigiDtlcRepository extends JpaRepository <PpurigiDtlc, Ppuri
     Optional<PpurigiDtlc> findByIdAndReceiveUserId(Long id, Long receiveUserId);
 
     List<PpurigiDtlc> findByIdAndReceiveUserIdIsNotNull(Long id);
+
 }

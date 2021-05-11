@@ -10,12 +10,19 @@ import javax.persistence.*;
 @Entity
 @EntityListeners(PpurigiListener.class)
 public class Ppurigi {
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
     private Long sendUserId;
+    @Column(nullable = false)
     private String roomId;
+    @Column(nullable = false)
     private Integer amount;
+    @Column(nullable = false)
     private Integer reqCnt;
+    @Column(nullable = false)
     private Date regDts;
+    @Column(nullable = false)
     private Date expDts;
     private String token;
 
