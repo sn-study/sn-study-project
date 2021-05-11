@@ -8,9 +8,13 @@ import sn.example.demo.model.PpurigiDtlcId;
 
 import java.util.Optional;
 
+import java.util.List;
+
 public interface PpurigiDtlcRepository extends JpaRepository <PpurigiDtlc, PpurigiDtlcId> {
 
     Optional<PpurigiDtlc> findFirstByIdAndReceiveUserIdIsNull(Long id);
 
     Optional<PpurigiDtlc> findByIdAndReceiveUserId(Long id, Long receiveUserId);
+
+    List<PpurigiDtlc> findByIdAndReceiveUserIdIsNotNull(Long id);
 }

@@ -4,19 +4,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sn.example.demo.dto.ListRequestDto;
 import sn.example.demo.dto.ReceiveRequestDto;
-import sn.example.demo.dto.SendReqestDto;
+import sn.example.demo.dto.ResultDto;
+import sn.example.demo.dto.SendRequestDto;
 import sn.example.demo.error.PpurigiReciveException;
 import sn.example.demo.error.TokenAlreadyExistsException;
+import sn.example.demo.error.TokenInvalidException;
 import sn.example.demo.model.Ppurigi;
 import sn.example.demo.model.PpurigiDtlc;
 import sn.example.demo.repository.PpurigiDtlcRepository;
 import sn.example.demo.repository.PpurigiRepository;
 import sn.example.demo.utils.TokenGenerator;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class PpurigiService {
@@ -32,7 +33,7 @@ public class PpurigiService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public String createPpurigi(SendReqestDto requestDto) throws TokenAlreadyExistsException {
+	public String createPpurigi(SendRequestDto requestDto) throws TokenAlreadyExistsException {
 		// 토큰 생성
 		String token = TokenGenerator.getToken();
 		if (this.findByTokenAndExpDtsLessThanNow(token).isPresent()) {
@@ -105,4 +106,43 @@ public class PpurigiService {
 	Optional<Ppurigi> findByTokenAndExpDtsLessThanNow(String token) {
 		return ppurigiRepository.findByTokenAndExpDtsGreaterThan(token, new Date());
 	}
+
+	public ResultDto listPpurigi(ListRequestDto requestDto){
+		// 뿌리기 시 발급된 token + 뿌린사람 요청값으로 받습니다.
+		// 뿌린시각,뿌린금액,받기완료된금액,받기완료된정보([받은금액,받은 사용자 아이디] 리스트)
+		// 다른사람의 뿌리기건이나 유효하지 않은 token에 대해서는 조회 실패 응답이 내려가야 합니다.
+		// 뿌린건에 대한 조회는 7일동안 할 수 있습니다.
+		Ppurigi ppurigi = ppurigiRepository.findBySendUserIdAndTokenAndRegDtsGreaterThan(requestDto.getSendUserId(), requestDto.getToken(), validMinRegDts());
+		if(ppurigi == null){
+			throw new TokenInvalidException();
+		}
+		HashMap<String, String> map = new HashMap<>();
+		map.put("뿌린 시각", ppurigi.getRegDts().toString());
+		map.put("뿌린 금액", ppurigi.getAmount().toString());
+
+		List<PpurigiDtlc> ppurigiDtlcList = ppurigiDtlcRepository.findByIdAndReceiveUserIdIsNotNull(ppurigi.getId());
+		Integer sendAmount = 0;
+		ArrayList<String> sendList = new ArrayList<String>();
+		for (PpurigiDtlc ppurigiDtlc : ppurigiDtlcList) {
+			sendAmount += ppurigiDtlc.getAmount();
+			String[] temp = {ppurigiDtlc.getAmount().toString(), ppurigiDtlc.getReceiveUserId().toString()};
+			sendList.add(Arrays.toString(temp));
+		}
+		map.put("받기 완료된 금액", sendAmount.toString());
+		map.put("받기 완료된 정보", sendList.toString());
+
+		ResultDto resultDto = new ResultDto.Builder("SUCCESS", "뿌리기 조회 성공").build();
+		resultDto.setResult(map);
+
+		return resultDto;
+
+	}
+
+	private Date validMinRegDts(){
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_MONTH, -7);
+		Date d = new Date(c.getTimeInMillis());
+		return d;
+	}
+
 }
