@@ -54,7 +54,11 @@ public class PpurigiController {
             result.put("amount", String.valueOf(amount));
             resultDto.setResult(result);
         } catch (PpurigiReciveException e) {
+            Log.debug(e.getMessage());
             return new ResultDto.Builder("FAIL", e.getMessage()).build();
+        } catch (Exception e) {
+            Log.debug(e.getMessage());
+            return new ResultDto.Builder("FAIL", "잠시 후에 다시 시도하세요.").build();
         }
 
         return resultDto;

@@ -2,6 +2,8 @@ package sn.example.demo.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
 @Entity
 @EntityListeners(PpurigiDtlcListener.class)
 @IdClass(PpurigiDtlcId.class)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class PpurigiDtlc {
 
 	@Id
@@ -19,6 +22,9 @@ public class PpurigiDtlc {
     private Long receiveUserId;
     private Date regDts;
     private Date modDts;
+
+    @Version
+    private int version;
 
     public Long getId() {
         return id;
@@ -66,6 +72,14 @@ public class PpurigiDtlc {
 
     public void setModDts(Date modDts) {
         this.modDts = modDts;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override
