@@ -16,7 +16,7 @@ public class PpurigiDtlc {
 	@Id
     private Integer seq;
 	private Integer amount;
-    private String receiveUserId;
+    private Long receiveUserId;
     private Date regDts;
     private Date modDts;
 
@@ -44,11 +44,11 @@ public class PpurigiDtlc {
         this.amount = amount;
     }
 
-    public String getReceiveUserId() {
+    public Long getReceiveUserId() {
         return receiveUserId;
     }
 
-    public void setReceiveUserId(String receiveUserId) {
+    public void setReceiveUserId(Long receiveUserId) {
         this.receiveUserId = receiveUserId;
     }
 

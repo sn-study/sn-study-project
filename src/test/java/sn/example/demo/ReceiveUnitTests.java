@@ -67,7 +67,7 @@ public class ReceiveUnitTests {
     @DisplayName("1.token에 해당하는 뿌리기 건 중 아직 누구에게도 할당되지 않은 분배건 하나를 API를 호출한 사용자에게 할당하고, 그 금액을 응답값으로 내려줍니다.")
     public void test1() throws Exception {
         //given
-        String url = "/receive";
+        String url = "/ppurigi";
         long userId = 2;
         String roomId = "room1";
 
@@ -76,7 +76,7 @@ public class ReceiveUnitTests {
         params.put("token", token);
         String content = objectMapper.writeValueAsString(params);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(url)
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
@@ -95,7 +95,7 @@ public class ReceiveUnitTests {
     @DisplayName("2.뿌리기 당 한 사용자는 한번만 받을 수 있습니다.")
     public void test2() throws Exception {
         //given
-        String url = "/receive";
+        String url = "/ppurigi";
         long userId = 3;
         String roomId = "room1";
 
@@ -104,14 +104,14 @@ public class ReceiveUnitTests {
         params.put("token", token);
         String content = objectMapper.writeValueAsString(params);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.resultCode", is("SUCCESS")));
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
@@ -123,7 +123,7 @@ public class ReceiveUnitTests {
     @DisplayName("3.자신이 뿌리기한 건은 자신이 받을 수 없습니다.")
     public void test3() throws Exception {
         //given
-        String url = "/receive";
+        String url = "/ppurigi";
         long userId = 1;
         String roomId = "room1";
 
@@ -132,7 +132,7 @@ public class ReceiveUnitTests {
         params.put("token", token);
         String content = objectMapper.writeValueAsString(params);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
@@ -144,7 +144,7 @@ public class ReceiveUnitTests {
     @DisplayName("4.뿌리기가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있습니다.")
     public void test4() throws Exception {
         //given
-        String url = "/receive";
+        String url = "/ppurigi";
         long userId = 4;
         String roomId = "room2";
 
@@ -153,7 +153,7 @@ public class ReceiveUnitTests {
         params.put("token", token);
         String content = objectMapper.writeValueAsString(params);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
@@ -165,7 +165,7 @@ public class ReceiveUnitTests {
     @DisplayName("5.뿌린 건은 10분간만 유효합니다. 뿌린지 10분이 지난 요청에 대해서는 받기 실패 응답이 내려가야 합니다.")
     public void test5() throws Exception {
         //given
-        String url = "/receive";
+        String url = "/ppurigi";
         long userId = 4;
         String roomId = "room_2";
 
@@ -174,7 +174,7 @@ public class ReceiveUnitTests {
         params.put("token", "DEF");
         String content = objectMapper.writeValueAsString(params);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
@@ -186,7 +186,7 @@ public class ReceiveUnitTests {
     @DisplayName("6.분배가 끝난 뿌리기 요청은 실패를 응답해야 합니다.")
     public void test6() throws Exception {
         //given
-        String url = "/receive";
+        String url = "/ppurigi";
         long userId = 4;
         String roomId = "room_1";
 
@@ -195,7 +195,7 @@ public class ReceiveUnitTests {
         params.put("token", "ABC");
         String content = objectMapper.writeValueAsString(params);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.put(url)
                 .header("X-USER-ID", userId)
                 .header("X-ROOM-ID", roomId)
                 .content(content)
