@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import sn.example.demo.dto.ReceiveRequestDto;
 import sn.example.demo.dto.ResultDto;
 import sn.example.demo.dto.SendReqestDto;
+import sn.example.demo.error.PpurigiReciveException;
 import sn.example.demo.error.TokenAlreadyExistsException;
 import sn.example.demo.service.PpurigiService;
 
@@ -46,14 +47,13 @@ public class PpurigiController {
         ResultDto resultDto = new ResultDto.Builder("SUCCESS", "뿌리기 받기 성공").build();
         requestDto.setReceiveUserId(userId);
         requestDto.setRoomId(roomId);
-
         try {
             int amount = ppurigiService.updatePpurigi(requestDto);
 
             Map<String, String> result = new HashMap<>();
             result.put("amount", String.valueOf(amount));
             resultDto.setResult(result);
-        } catch (Exception e) {
+        } catch (PpurigiReciveException e) {
             return new ResultDto.Builder("FAIL", e.getMessage()).build();
         }
 
