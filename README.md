@@ -1,4 +1,6 @@
 # sn-study-project
+@anna.1na
+@amjay.shin
 ## 요구사항
 ## 개발환경
 - Java 8
