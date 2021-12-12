@@ -2,6 +2,7 @@
 @anna.1na
 @amjay.shin
 ## 요구사항
+요구 받은 것들을 요구사항이라고 부릅니다.
 ## 개발환경
 - Java 8
 - Spring Boot 2.4.5
